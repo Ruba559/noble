@@ -18,4 +18,52 @@ class UserController extends Controller
         return  UserResources::collection($user);
      
     }
+
+
+    public function store(Request $request)
+    {
+
+        $fields = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+      
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+       
+        return response($user, 201);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+
+        $fields = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+
+        $user = User::find($id); 
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return response($user, 201);
+    }
+
+   
+    public function destroy($id)
+    {
+
+        $user = User::find($id); 
+
+        $user->delete();
+
+        return response($user, 201);
+    }
 }

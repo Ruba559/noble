@@ -17,12 +17,13 @@ class ArticleResources extends JsonResource
         return [
  
             'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'body' => $this->body,
-            'image' =>$this->image,
-            'seo_title' => $this->seo_title,
-            'seo_description' => $this->seo_description	
+            'title' => $this->title ?? "",
+            'description' => $this->description ?? "",
+            'body' => $this->body ?? "",
+            'image' => $this->image !=null? asset('storage'.$this->image):"" ,
+            'author_id' =>  ! $this->user ? '' : new UserResources($this->user),
+            'created_at'=> $this->created_at ?? "",
+           
 
         ];
     }

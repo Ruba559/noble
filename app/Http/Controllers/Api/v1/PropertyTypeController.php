@@ -19,4 +19,48 @@ class PropertyTypeController extends Controller
         return  PropertyTypeResources::collection($PropertyType);
      
     }
+
+
+    public function store(Request $request)
+    {
+
+        $fields = $request->validate([
+            'name' => 'required',
+        ]);
+      
+        $propertyType = PropertyType::create([
+            'name' => $request->name,
+        ]);
+
+       
+        return response($propertyType, 201);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+
+        $fields = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $propertyType = PropertyType::find($id); 
+
+        $propertyType->update([
+            'name' => $request->name,
+        ]);
+
+        return response($propertyType, 201);
+    }
+
+   
+    public function destroy($id)
+    {
+
+        $propertyType = PropertyType::find($id); 
+
+        $propertyType->delete();
+
+        return response($propertyType, 201);
+    }
 }

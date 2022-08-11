@@ -17,8 +17,9 @@ class PlaceResources extends JsonResource
         return [
  
             'id' => $this->id,
-            'name' => $this->name,
-            'city_id' => $this->city_id,
+            'name' => $this->name ?? "",
+            'city' => ! $this->city ? '' :  new CityResources($this->city),
+            'created_at'=> $this->created_at ?? "",
            
         ];
     }

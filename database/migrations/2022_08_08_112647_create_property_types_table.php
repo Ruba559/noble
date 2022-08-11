@@ -18,6 +18,8 @@ class CreatePropertyTypesTable extends Migration
             $table->string('name');
             $table->timestamp('deleted_at');
             $table->string('slug');
+            $table->longText('seo_title');
+            $table->longText('seo_description');
             $table->timestamps();
         });
     }

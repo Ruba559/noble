@@ -49,6 +49,10 @@ class CreatePropertiesTable extends Migration
             $table->tinyInteger('has_garden');
             $table->timestamp('deleted_at');
             $table->string('slug');
+            $table->longText('seo_title');
+            $table->longText('seo_description');
+            $table->longText('long')->nullable();
+            $table->longText('lat')->nullable();
             $table->timestamps();
         });
     }

@@ -18,4 +18,51 @@ class CityController extends Controller
         return  CityResources::collection($city);
      
     }
+
+
+    public function store(Request $request)
+    {
+
+        $fields = $request->validate([
+            'name' => 'required',
+        ]);
+
+      
+        $city = City::create([
+            'name' => $request->name,
+            
+        ]);
+
+       
+        return response($city, 201);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+
+        $fields = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $city = City::find($id); 
+
+        $city->update([
+            'name' => $request->name,
+            
+        ]);
+
+        return response($city, 201);
+    }
+
+   
+    public function destroy($id)
+    {
+
+        $city = City::find($id); 
+
+        $city->delete();
+
+        return response($city, 201);
+    }
 }
