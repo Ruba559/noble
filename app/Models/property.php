@@ -13,6 +13,9 @@ class Property extends Model
 
     protected $translatable = ['name' , 'type' , 'title' , 'description' , 'adress' , 'floor' , 'divider' , 'seo_title' , 'seo_description'];
 
+    
+    protected $table = 'properties';
+
     protected $guarded = [];
 
     public function cladding()

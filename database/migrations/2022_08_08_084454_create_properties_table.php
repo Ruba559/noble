@@ -24,6 +24,8 @@ class CreatePropertiesTable extends Migration
             $table->integer('city_id');
             $table->decimal('space');
             $table->integer('place_id');
+            $table->integer('office_id')->nullable();
+            $table->integer('author_id')->nullable();
             $table->longText('adress');
             $table->tinyInteger('status');
             $table->integer('rooms');
