@@ -14,7 +14,11 @@ class Property extends Model
     protected $translatable = ['name' , 'type' , 'title' , 'description' , 'adress' , 'floor' , 'divider' , 'seo_title' , 'seo_description'];
 
     
+   
     protected $table = 'properties';
+
+    
+    protected $primaryKey = 'id';
 
     protected $guarded = [];
 
@@ -34,4 +38,16 @@ class Property extends Model
     {
         return $this->belongsTo(Place::class);
     }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function propertyType()
+    {
+        return $this->belongsTo(PropertyType::class);
+    }
+
+
 }

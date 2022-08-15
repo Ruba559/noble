@@ -84,7 +84,7 @@ class PropertyController extends Controller
             'has_shofag' => $request->has_shofag,
             'has_jacuzzi' => $request->has_jacuzzi,
             'has_garden' => $request->has_garden,
-
+            'slug' => $this->slug($request->name),
         ]);
 
        
@@ -123,7 +123,7 @@ class PropertyController extends Controller
         $property = Property::find($id); 
 
         $property->update([
-                    'name' => $request->name,
+            'name' => $request->name,
             'type' => $request->type,
             'propery_type_id' => $request->propery_type_id,
             'price' => $request->price,
@@ -155,6 +155,7 @@ class PropertyController extends Controller
             'has_shofag' => $request->has_shofag,
             'has_jacuzzi' => $request->has_jacuzzi,
             'has_garden' => $request->has_garden,
+            'slug' => $this->slug($request->name),
         ]);
 
         return response($property, 201);
@@ -169,5 +170,21 @@ class PropertyController extends Controller
         $property->delete();
 
         return response($property, 201);
+    }
+
+
+    public function slug($string, $separator = '-')
+    {
+        if (is_null($string)) {
+            return "";
+        }
+    
+        $string = trim($string);
+        $string = mb_strtolower($string, "UTF-8");;
+        $string = preg_replace("/[^a-z0-9_\sءاأإآؤئبتثجحخدذرزسشصضطظعغفقكلمنهويةى]#u/", "", $string);
+        $string = preg_replace("/[\s-]+/", " ", $string);
+        $string = preg_replace("/[\s_]/", $separator, $string);
+    
+        return $string;
     }
 }

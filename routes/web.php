@@ -23,3 +23,4 @@ Route::get('/dashboard', function () {
 
 
 Route::post('/search', [SearchController::class,'Search'])->name('search');
+Route::get('/getNear', [SearchController::class,'getNear']);

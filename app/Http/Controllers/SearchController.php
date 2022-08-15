@@ -10,8 +10,6 @@ use App\Models\User;
 use App\Models\Office;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Abdullah\UserGeoLocation\GeoLocation;
-use Geocoder;
 use DB;
 
 class SearchController extends Controller
@@ -20,10 +18,7 @@ class SearchController extends Controller
     public function Search(Request $request)
     {
         $words = explode(' ', $request->search); 
-      //  $words = str_split($request->search , 2);
       
-        //$wordCount = Str::of($request->search)->wordCount();
-      // return $words[0];
        $property_collection = new Collection;
        $propertyType_collection = new Collection;
        $office_collection = new Collection;
@@ -52,50 +47,34 @@ class SearchController extends Controller
         'propertyType' => $propertyType_collection,
         'office' => $office_collection,
     ]);
-    //   $property = Property::first();
-       //return  $this->distance(auth::user()->lat, auth::user()->long, $property->lat, $property->long, 'k') ;
-     // return  $this->getNearPropertyById(auth::user()->long , auth::user()->lat);
+     
        return $all_collection->all();
      
     }
-   
-    public function getNearPropertyById($long , $lat)
-    {
-        
-          
-      $property = DB::table('properties')->select('*',DB::raw("6371 * acos(cos(radians(" . floatval($lat) . "))
-      * cos(radians(lat)) * cos(radians(long) - radians(" . floatval($long) . "))
-      + sin(radians(" . $lat . ")) * sin(radians(lat))
-        ) AS distance"))->having('distance' , '<=' , floatval('100000'))->orderBy('distance','asc')->first();
-
     
-             return $property->id;
+
+    public function getNear()
+    {
+        return  $this->getNearPropertyById(auth::user()->lat , auth::user()->long );
+    }
+
+
+    public function getNearPropertyById($lat , $long)
+    {
+         $user_lat = floatval($lat);
+         $user_lng = floatval($long);
+         
+      $property = DB::table('properties')->select('*',
+      DB::raw("6371 * acos(cos(radians(" . $user_lat . "))
+      * cos(radians(properties.lat)) * cos(radians(properties.long) - radians(" . $user_lng . "))
+      + sin(radians(" . $user_lat . ")) * sin(radians(properties.lat))
+        ) AS distance"))->having('distance' , '<=' , floatval('100000'))->orderBy('distance','asc')->get();
+
+        
+             return $property;
              
     }
    
 
-    public function distance($lat1, $lon1, $lat2, $lon2, $unit) 
-    {
- 
-         if (($lat1 == $lat2) && ($lon1 == $lon2)) {
-           return 0;
-         }
- 
-         else {
-           $theta = $lon1 - $lon2;
-           $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-           $dist = acos($dist);
-           $dist = rad2deg($dist);
-           $miles = $dist * 60 * 1.1515;
-           $unit = strtoupper($unit);
-         
-                   if ($unit == "K") {
-                     return ($miles * 1.609344);
-                   } else if ($unit == "N") {
-                     return (int)($miles * 0.8684);
-                   } else {
-                     return (int)$miles;
-           }
-   }
- }
+    
 }

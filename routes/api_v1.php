@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\v1\CityController;
 use App\Http\Controllers\Api\v1\FavoriteController;
 use App\Http\Controllers\Api\v1\BackNotificationController;
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\OfficeController;
+use App\Http\Controllers\Api\v1\StoryController;
 
 
 Route::get('/', function () {
@@ -81,5 +83,15 @@ Route::get('/backNotification', [BackNotificationController::class,'index']);
 Route::post('/backNotification', [BackNotificationController::class,'store']);
 Route::post('/backNotification/{id}', [BackNotificationController::class,'update']);
 Route::delete('/backNotification/{id}', [BackNotificationController::class,'destroy']);
+
+Route::get('/office', [OfficeController::class,'index']);
+Route::post('/office', [OfficeController::class,'store']);
+Route::post('/office/{id}', [OfficeController::class,'update']);
+Route::delete('/office/{id}', [OfficeController::class,'destroy']);
+
+Route::get('/story', [StoryController::class,'index']);
+Route::post('/story', [StoryController::class,'store']);
+Route::post('/story/{id}', [StoryController::class,'update']);
+Route::delete('/story/{id}', [StoryController::class,'destroy']);
 
 });
