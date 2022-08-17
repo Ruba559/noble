@@ -21,3 +21,17 @@
 <input type="text" name="search">
 <input type="submit">
 </form>
+
+<form action="{{ route('advanc_search') }}" method="POST">
+    @csrf
+   name :<input type="text" name="name">
+   type :<input type="text" name="type">
+  title :<input type="text" name="title">
+  city :<input type="text" name="city_id">
+  price: <input  type="range" name="price" min="0" max="10">
+    <input type="submit">
+    </form>
+   {{-- {{ $city->getTranslatedAttribute('name', app()->getLocale(), 'ar')}} --}}
+    
+ 
+

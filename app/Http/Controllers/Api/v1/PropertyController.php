@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\PropertyResources;
 use App\Models\Property;
+use App\Events\NotificationEvent;
+use Pusher\Pusher;
 
 class PropertyController extends Controller
 {
@@ -22,6 +24,7 @@ class PropertyController extends Controller
 
     public function store(Request $request)
     {
+
 
         $fields = $request->validate([
             'name' => 'required',
@@ -45,8 +48,6 @@ class PropertyController extends Controller
             'image' => 'required',
             'floors' => 'required',
             'divider' => 'required',
-            'views' => 'required',
-           
 
         ]); 
 
@@ -85,9 +86,12 @@ class PropertyController extends Controller
             'has_jacuzzi' => $request->has_jacuzzi,
             'has_garden' => $request->has_garden,
             'slug' => $this->slug($request->name),
+            'seo_title' => $request->seo_title,
+            'seo_description' => $request->seo_description,
         ]);
 
-       
+        event(new NotificationEvent('data'));
+
         return response($property, 201);
     }
 
@@ -95,7 +99,7 @@ class PropertyController extends Controller
     public function update(Request $request, $id)
     {
 
-        $validator = Validator::make($request->all(), [
+        $fields = $request->validate([
             'name' => 'required',
             'type' => 'required',
             'propery_type_id' => 'required',
@@ -117,8 +121,7 @@ class PropertyController extends Controller
             'image' => 'required',
             'floors' => 'required',
             'divider' => 'required',
-            'views' => 'required',
-        ]);
+        ]); 
 
         $property = Property::find($id); 
 
@@ -156,6 +159,8 @@ class PropertyController extends Controller
             'has_jacuzzi' => $request->has_jacuzzi,
             'has_garden' => $request->has_garden,
             'slug' => $this->slug($request->name),
+            'seo_title' => $request->seo_title,
+            'seo_description' => $request->seo_description,
         ]);
 
         return response($property, 201);

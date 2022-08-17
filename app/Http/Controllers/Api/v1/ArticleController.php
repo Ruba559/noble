@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticleResources;
 use App\Models\Article;
+use App\Jobs\UploadImage;
 
 class ArticleController extends Controller
 {
@@ -30,15 +31,17 @@ class ArticleController extends Controller
             'author_id' => 'required',
             'seo_title' => 'required',
             'seo_description' => 'required',
-            'image' => 'required',
+            'image' => 'nullable',
         ]);
         $imageName = "";
 
         if($request->image){
-
-        $image= $request->file('image');
-        $imageName = time().'.'.$image->extension();
-        $image->move(public_path('images\articles'),$imageName);
+            $image = $request->file('image');
+            $imageName = time().'.'.$image->extension();
+            //$image->move(public_path('images\articles'),$imageName);
+        
+            UploadImage::dispatch($request->image);
+       
         }
 
         $article = Article::create([

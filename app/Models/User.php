@@ -24,7 +24,10 @@ class User  extends  \TCG\Voyager\Models\User  implements MustVerifyEmail
         'email',
         'password',
         'long' ,
-        'lat'
+        'lat',
+        'status',
+        'fcm_token',
+        'slug',
     ];
 
    

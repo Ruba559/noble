@@ -8,6 +8,7 @@ use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\User;
 use App\Models\Office;
+use App\Models\Place;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use DB;
@@ -39,8 +40,8 @@ class SearchController extends Controller
                 'office' => $office,
             ]);
         
-         
        }
+
        $all_collection = new Collection;
        $all_collection->push((object)[
         'property' => $property_collection,
@@ -53,9 +54,25 @@ class SearchController extends Controller
     }
     
 
+    public function AdvancSearch(Request $request)
+    {
+      
+          $property = Property::Where('type' , $request->type)->orwhere('name' , $request->name)
+          ->orWhere('title' , $request->title)->orWhere('city_id' , $request->city_id)->orwhere('price' , '<' , $request->price)->get();
+         
+         
+          $posts = Place::first(); 
+
+
+
+          return  view('dashboard' , ['city' => $posts]);
+          return   $property ;
+    }
+
+
     public function getNear()
     {
-        return  $this->getNearPropertyById(auth::user()->lat , auth::user()->long );
+        return  $this->getNearPropertyById(auth::user()->lat , auth::user()->long);
     }
 
 

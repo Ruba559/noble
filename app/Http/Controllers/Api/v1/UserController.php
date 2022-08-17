@@ -26,11 +26,20 @@ class UserController extends Controller
         $fields = $request->validate([
             'name' => 'required',
             'email' => 'required',
+            'password' => 'required',
+            'long' => 'nullable',
+            'lat' => 'nullable',
         ]);
       
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'password' => $request->password,
+            'status' => '0',
+            'fcm_token' => 'token',
+            'long' => $request->long,
+            'lat' => $request->lat,
+            'slug' =>  $this->slug($request->name),
         ]);
 
        
@@ -44,6 +53,9 @@ class UserController extends Controller
         $fields = $request->validate([
             'name' => 'required',
             'email' => 'required',
+            'password' => 'required',
+            'long' => 'nullable',
+            'lat' => 'nullable',
         ]);
 
         $user = User::find($id); 
@@ -51,6 +63,12 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'password' => $request->password,
+            'status' => '0',
+            'fcm_token' => 'token',
+            'long' => $request->long,
+            'lat' => $request->lat,
+            'slug' =>  $this->slug($request->name),
         ]);
 
         return response($user, 201);
@@ -65,5 +83,20 @@ class UserController extends Controller
         $user->delete();
 
         return response($user, 201);
+    }
+
+    public function slug($string, $separator = '-')
+    {
+        if (is_null($string)) {
+            return "";
+        }
+    
+        $string = trim($string);
+        $string = mb_strtolower($string, "UTF-8");;
+        $string = preg_replace("/[^a-z0-9_\sءاأإآؤئبتثجحخدذرزسشصضطظعغفقكلمنهويةى]#u/", "", $string);
+        $string = preg_replace("/[\s-]+/", " ", $string);
+        $string = preg_replace("/[\s_]/", $separator, $string);
+    
+        return $string;
     }
 }

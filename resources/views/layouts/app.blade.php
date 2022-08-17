@@ -12,6 +12,33 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+        <script>
+      
+     
+
+    var pusher = new Pusher('2ab5d8a7f030d51e3886', {
+     cluster: 'eu'
+     });
+
+ 
+
+     var channel = pusher.subscribe('app_pusher');
+
+channel.bind('NotificationEvent', function(data) {
+    console.log(data)
+    console.log('hi');
+        alert(JSON.stringify(data))
+        app.messages.push(JSON.stringify(data));
+
+});
+
+
+  
+        </script>
+
+
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
