@@ -33,9 +33,9 @@ class StoryController extends Controller
 
         if($request->image){
 
-        $image= $request->file('image');
-        $imageName = time().'.'.$image->extension();
-        $image->move(public_path('images\story'),$imageName);
+         $image= $request->file('image');
+          $name = $image->getClientOriginalName();
+            $imageName = $image->storeAs('temp_uploads\story', $name, 'public');
         }
 
         $story = Story::create([

@@ -35,8 +35,20 @@ class OfficeController extends Controller
             'user_id' => 'required',
             'url' => 'nullable'
         ]);
+        $imageNameLogo = "";
+        $imageNameCover = "";
+        if($request->logo){
 
-      
+            $image= $request->file('logo');
+             $name = $image->getClientOriginalName();
+               $imageNameLogo = $image->storeAs('temp_uploads\logo', $name, 'public');
+           }
+           if($request->cover){
+
+            $image= $request->file('cover');
+             $name = $image->getClientOriginalName();
+               $imageNameCover = $image->storeAs('temp_uploads\cover', $name, 'public');
+           }
 
         $office = Office::create([
             'name' => $request->name,
