@@ -32,7 +32,10 @@ class NotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('app_pusher');
+        return ['app_pusher'];
     }
-
+    public function broadcastAs()
+    {
+        return 'noti';
+    }
 }

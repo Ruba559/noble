@@ -48,6 +48,7 @@ Route::get('/property', [PropertyController::class,'index']);
 Route::post('/property', [PropertyController::class,'store']);
 Route::post('/property/{id}', [PropertyController::class,'update']);
 Route::delete('/property/{id}', [PropertyController::class,'destroy']);
+Route::post('/temp_uploads_images', [PropertyController::class,'uploadImages']);
 
 Route::get('/propertyType', [PropertyTypeController::class,'index']);
 Route::post('/propertyType', [PropertyTypeController::class,'store']);

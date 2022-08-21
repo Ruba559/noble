@@ -28,9 +28,4 @@ Route::get('/getNear', [SearchController::class,'getNear']);
 
 Route::get('/language/{locale}', [LocaleController::class,'switch'])->name('switchlang');
 
-Route::get('/test', function () {
-    event(new NotificationEvent('data'));
-       
-    return view('dashboard');
-});
 

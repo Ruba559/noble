@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\PropertyResources;
 use App\Models\Property;
+use App\Models\Image;
 use App\Events\NotificationEvent;
 use Pusher\Pusher;
 
@@ -26,32 +27,39 @@ class PropertyController extends Controller
     {
 
 
-        $fields = $request->validate([
-            'name' => 'required',
-            'type' => 'required',
-            'propery_type_id' => 'required',
-            'price' => 'required',
-            'title' => 'required',
-            'description' => 'required',
-            'city_id' => 'required',
-            'space' => 'required',
-            'place_id' => 'required',
-            'adress' => 'required',
-            'status' => 'required',
-            'rooms' => 'required',
-            'salons' => 'required',
-            'baths' => 'required',
-            'floor' => 'required',
-            'direction_id' => 'required', 
-            'cladding_id' => 'required',
-            'mobile_phone' => 'required',
-            'image' => 'required',
-            'floors' => 'required',
-            'divider' => 'required',
+        // $fields = $request->validate([
+        //     'name' => 'required',
+        //     'type' => 'required',
+        //     'propery_type_id' => 'required',
+        //     'price' => 'required',
+        //     'title' => 'required',
+        //     'description' => 'required',
+        //     'city_id' => 'required',
+        //     'space' => 'required',
+        //     'place_id' => 'required',
+        //     'adress' => 'required',
+        //     'status' => 'required',
+        //     'rooms' => 'required',
+        //     'salons' => 'required',
+        //     'baths' => 'required',
+        //     'floor' => 'required',
+        //     'direction_id' => 'required', 
+        //     'cladding_id' => 'required',
+        //     'mobile_phone' => 'required',
+        //     'image' => 'required',
+        //     'floors' => 'required',
+        //     'divider' => 'required',
 
-        ]); 
+        // ]); 
+        if ($request->hasfile('images')) {
+            $images = $request->file('images');
+        
+        foreach($images as $key => $image ) {
 
-      
+            $name = $image->getClientOriginalName();
+            $path[$key] = $image->storeAs('temp_uploads\property', $name, 'public');
+        }    
+       }
         $property = Property::create([
             'name' => $request->name,
             'type' => $request->type,
@@ -71,7 +79,7 @@ class PropertyController extends Controller
             'direction_id' => $request->direction_id,
             'cladding_id' => $request->cladding_id,
             'mobile_phone' => $request->mobile_phone,
-            'image' => $request->image,
+            'image' => json_encode($path),
             'floors' => $request->floors,
             'divider' => $request->divider,
             'views' => $request->views,
@@ -92,8 +100,33 @@ class PropertyController extends Controller
 
         event(new NotificationEvent('data'));
 
-        return response($property, 201);
+         return response($property, 201);
     }
+
+
+    public function uploadImages($request)
+    {
+      
+        if ($request->hasfile('images')) {
+            $images = $request->file('images');
+
+            foreach($images as $key => $image ) {
+                $name = $image->getClientOriginalName();
+                $path[$key] = $image->storeAs('temp_uploads\property', $name, 'public');
+                
+                
+
+                Image::create([
+                    'name' => $name,
+                    'user_id' => $request->user_id,
+                  ]);
+               
+            }
+         }
+         return $path = json_encode($path);
+         return response($path );
+    }
+
 
 
     public function update(Request $request, $id)

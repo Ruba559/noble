@@ -16,21 +16,23 @@
         <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
         <script>
       
-     
+      Pusher.logToConsole = true;
 
     var pusher = new Pusher('2ab5d8a7f030d51e3886', {
-     cluster: 'eu'
+     cluster: 'eu',
+     encrypted: true
      });
 
  
 
      var channel = pusher.subscribe('app_pusher');
 
-channel.bind('NotificationEvent', function(data) {
-    console.log(data)
-    console.log('hi');
-        alert(JSON.stringify(data))
-        app.messages.push(JSON.stringify(data));
+channel.bind('noti', function(data) {
+    // console.log(data)
+    // console.log('hi');
+       alert(JSON.stringify(data.message))
+       // alert('hi')
+       // app.messages.push(JSON.stringify(data));
 
 });
 

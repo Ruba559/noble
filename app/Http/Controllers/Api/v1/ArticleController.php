@@ -33,16 +33,20 @@ class ArticleController extends Controller
             'seo_description' => 'required',
             'image' => 'nullable',
         ]);
-        $imageName = "";
+        //  $imageName = "";
 
-        if($request->image){
-            $image = $request->file('image');
-            $imageName = time().'.'.$image->extension();
-            //$image->move(public_path('images\articles'),$imageName);
+        // if($request->image){
+
+        //    $image = $request->file('image');
         
-            UploadImage::dispatch($request->image);
+        //   $imageName = time().'.'.$image->extension();
+        //     //$image->move(public_path('images\articles'),$imageName);
+        
+        
        
-        }
+        // }
+
+
 
         $article = Article::create([
             'title' => $request->title,
@@ -51,7 +55,7 @@ class ArticleController extends Controller
             'author_id' => $request->author_id,
             'seo_title' => $request->seo_title,
             'seo_description' => $request->seo_description,
-            'image' => $imageName,
+            'image' => 'n',
         ]);
 
        

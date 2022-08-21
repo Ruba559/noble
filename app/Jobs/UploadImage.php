@@ -20,11 +20,13 @@ class UploadImage implements ShouldQueue
      * @return void
      */
 
-    private $a;
+    private $image;
+    private $imageName;
 
-    public function __construct($a)
+    public function __construct($image , $imageName)
     {
-        $this->a = $a;
+        $this->image = $image;
+        $this->imageName = $imageName;
     }
 
     /**
@@ -35,7 +37,9 @@ class UploadImage implements ShouldQueue
     public function handle()
     {
         Log::info('image');
-        Log::info($this->a);
+        
+        Log::info($this->image);
+        Log::info($this->imageName);
      //  $this->image->move(public_path('images\articles'),$this->imageName);
     }
 }

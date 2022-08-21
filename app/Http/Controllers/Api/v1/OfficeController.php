@@ -36,20 +36,7 @@ class OfficeController extends Controller
             'url' => 'nullable'
         ]);
 
-        $imageNameLogo = "";
-        $imageNameCover = "";
-        if($request->logo){
-
-        $image= $request->file('logo');
-        $imageNameLogo = time().'.'.$image->extension();
-        $image->move(public_path('images\office\logo'),$imageNameLogo);
-        }
-        if($request->cover){
-
-            $image= $request->file('cover');
-            $imageNameCover = time().'.'.$image->extension();
-            $image->move(public_path('images\office\cover'),$imageNameCover);
-            }
+      
 
         $office = Office::create([
             'name' => $request->name,
