@@ -41,13 +41,13 @@ class OfficeController extends Controller
 
             $image= $request->file('logo');
              $name = $image->getClientOriginalName();
-               $imageNameLogo = $image->storeAs('temp_uploads\logo', $name, 'public');
+               $imageNameLogo = $image->storeAs('temp_uploads\office\logo', $name, 'public');
            }
            if($request->cover){
 
             $image= $request->file('cover');
              $name = $image->getClientOriginalName();
-               $imageNameCover = $image->storeAs('temp_uploads\cover', $name, 'public');
+               $imageNameCover = $image->storeAs('temp_uploads\office\cover', $name, 'public');
            }
 
         $office = Office::create([
@@ -92,21 +92,22 @@ class OfficeController extends Controller
         if ($request->logo) {
             if($office->logo)
             {
-            if(File_exists(public_path('images/office/logo'.'/'.$office->logo))){
+        if(File_exists(public_path().'/storage/'.$office->logo))
+        {
 
-                unlink(public_path('images/office/logo'.'/'.$office->logo));
-            }
+           unlink(public_path().'/storage/'.$office->logo);
+        }
 
-                $image = $request->file('logo');
-                $imageNameLogo = time().'.'.$image->extension();
-                $image->move(public_path('images\office\logo'),$imageNameLogo);
+           $image= $request->file('logo');
+           $name = $image->getClientOriginalName();
+           $imageNameLogo = $image->storeAs('temp_uploads\office\logo', $name, 'public');
         
                 $office->update(['logo' => $imageNameLogo]);
         }else{
             
             $image= $request->file('logo');
-            $imageNameLogo = time().'.'.$image->extension();
-            $image->move(public_path('images\office\logo'),$imageNameLogo);
+            $name = $image->getClientOriginalName();
+            $imageNameLogo = $image->storeAs('temp_uploads\office\logo', $name, 'public');
     
             $office->update(['logo' => $imageNameLogo]);
         }
@@ -115,21 +116,23 @@ class OfficeController extends Controller
         if ($request->cover) {
             if($office->cover)
             {
-            if(File_exists(public_path('images/office/cover'.'/'.$office->cover))){
+                if(File_exists(public_path().'/storage/'.$office->cover))
+                {
+        
+                   unlink(public_path().'/storage/'.$office->cover);
+                }
 
-                unlink(public_path('images/office/cover'.'/'.$office->cover));
-            }
-
-                $image = $request->file('cover');
-                $imageNameCover = time().'.'.$image->extension();
-                $image->move(public_path('images\office\cover'),$imageNameCover);
+                $image= $request->file('cover');
+                $name = $image->getClientOriginalName();
+                $imageNameCover = $image->storeAs('temp_uploads\office\cover', $name, 'public');    
         
                 $office->update(['cover' => $imageNameCover]);
         }else{
             
             $image= $request->file('cover');
-            $imageNameCover = time().'.'.$image->extension();
-            $image->move(public_path('images\office\cover'),$imageNameCover);
+            $name = $image->getClientOriginalName();
+            $imageNameCover = $image->storeAs('temp_uploads\office\cover', $name, 'public');
+
     
             $office->update(['cover' => $imageNameCover]);
         }
@@ -144,15 +147,16 @@ class OfficeController extends Controller
 
         $office = Office::find($id); 
 
-        if(File_exists(public_path('images/office/logo'.'/'.$office->logo))){
+        if(File_exists(public_path().'/storage/'.$office->cover))
+        {
 
-            unlink(public_path('images/office/logo').'/'.$office->logo);
+           unlink(public_path().'/storage/'.$office->cover);
         }
-        if(File_exists(public_path('images/office/cover'.'/'.$office->cover))){
+        if(File_exists(public_path().'/storage/'.$office->logo))
+        {
 
-            unlink(public_path('images/office/cover').'/'.$office->cover);
+           unlink(public_path().'/storage/'.$office->logo);
         }
-
 
         $office->delete();
 

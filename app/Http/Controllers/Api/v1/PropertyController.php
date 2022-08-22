@@ -151,50 +151,96 @@ class PropertyController extends Controller
             'direction_id' => 'required', 
             'cladding_id' => 'required',
             'mobile_phone' => 'required',
-            'image' => 'required',
+            'images' => 'nullable',
             'floors' => 'required',
             'divider' => 'required',
         ]); 
 
         $property = Property::find($id); 
 
-        $property->update([
-            'name' => $request->name,
-            'type' => $request->type,
-            'propery_type_id' => $request->propery_type_id,
-            'price' => $request->price,
-            'title' => $request->title,
-            'description' => $request->description,
-            'city_id' => $request->city_id,
-            'space' => $request->space,
-            'place_id' => $request->place_id,
-            'adress' => $request->adress,
-            'status' => $request->status,
-            'rooms' => $request->rooms,
-            'salons' => $request->salons,
-            'baths' => $request->baths,
-            'floor' => $request->floor,
-            'direction_id' => $request->direction_id,
-            'cladding_id' => $request->cladding_id,
-            'mobile_phone' => $request->mobile_phone,
-            'image' => $request->image,
-            'floors' => $request->floors,
-            'divider' => $request->divider,
-            'views' => $request->views,
-            'has_elevator' => $request->has_elevator,
-            'has_generator' => $request->has_generator,
-            'has_terrace' => $request->has_terrace,
-            'has_pool' => $request->has_pool,
-            'has_conditioner' => $request->has_conditioner,
-            'has_saona' => $request->has_saona,
-            'has_garag' => $request->has_garag,
-            'has_shofag' => $request->has_shofag,
-            'has_jacuzzi' => $request->has_jacuzzi,
-            'has_garden' => $request->has_garden,
-            'slug' => $this->slug($request->name),
-            'seo_title' => $request->seo_title,
-            'seo_description' => $request->seo_description,
-        ]);
+        $property->update($request->except(['images']));
+  
+
+        if ($request->images) {
+            if($property->image)
+            {
+                foreach(json_decode($property->image) as $item)
+                {
+                    
+                  if(File_exists(public_path().'/storage/'.$item))
+                  {
+        
+                      unlink(public_path().'/storage/'.$item);
+                  }
+                }
+                // if(File_exists(public_path().'/storage/'.$property->image))
+                // {
+        
+                //    unlink(public_path().'/storage/'.$property->image);
+                // }
+
+            $images = $request->file('images');
+            
+            foreach($images as $key => $image ) {
+
+              $name = $image->getClientOriginalName();
+              $path[$key] = $image->storeAs('temp_uploads\property', $name, 'public');
+            }  
+            // $name = $image->getClientOriginalName();
+            // $imageName = $image->storeAs('temp_uploads\property', $name, 'public');
+
+                $property->update(['image' => json_encode($path)]);
+        }else{
+            
+            $images = $request->file('images');
+            
+            foreach($images as $key => $image ) {
+
+              $name = $image->getClientOriginalName();
+              $path[$key] = $image->storeAs('temp_uploads\property', $name, 'public');
+            }  
+    
+             $property->update(['image' => json_encode($path)]);
+        }
+        }
+
+        // $property->update([
+        //     'name' => $request->name,
+        //     'type' => $request->type,
+        //     'propery_type_id' => $request->propery_type_id,
+        //     'price' => $request->price,
+        //     'title' => $request->title,
+        //     'description' => $request->description,
+        //     'city_id' => $request->city_id,
+        //     'space' => $request->space,
+        //     'place_id' => $request->place_id,
+        //     'adress' => $request->adress,
+        //     'status' => $request->status,
+        //     'rooms' => $request->rooms,
+        //     'salons' => $request->salons,
+        //     'baths' => $request->baths,
+        //     'floor' => $request->floor,
+        //     'direction_id' => $request->direction_id,
+        //     'cladding_id' => $request->cladding_id,
+        //     'mobile_phone' => $request->mobile_phone,
+        //     'image' => $request->image,
+        //     'floors' => $request->floors,
+        //     'divider' => $request->divider,
+        //     'views' => $request->views,
+        //     'has_elevator' => $request->has_elevator,
+        //     'has_generator' => $request->has_generator,
+        //     'has_terrace' => $request->has_terrace,
+        //     'has_pool' => $request->has_pool,
+        //     'has_conditioner' => $request->has_conditioner,
+        //     'has_saona' => $request->has_saona,
+        //     'has_garag' => $request->has_garag,
+        //     'has_shofag' => $request->has_shofag,
+        //     'has_jacuzzi' => $request->has_jacuzzi,
+        //     'has_garden' => $request->has_garden,
+        //     'slug' => $this->slug($request->name),
+        //     'seo_title' => $request->seo_title,
+        //     'seo_description' => $request->seo_description,
+        // ]);
 
         return response($property, 201);
     }
@@ -205,7 +251,17 @@ class PropertyController extends Controller
 
         $property = Property::find($id); 
 
-        $property->delete();
+        foreach(json_decode($property->image) as $item)
+        {
+            
+          if(File_exists(public_path().'/storage/'.$item))
+          {
+
+              unlink(public_path().'/storage/'.$item);
+          }
+        }
+
+          $property->delete();
 
         return response($property, 201);
     }

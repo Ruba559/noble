@@ -35,7 +35,7 @@ class StoryController extends Controller
 
          $image= $request->file('image');
           $name = $image->getClientOriginalName();
-            $imageName = $image->storeAs('temp_uploads\story', $name, 'public');
+            $imageName = $image->storeAs('temp_uploads/story', $name, 'public');
         }
 
         $story = Story::create([
@@ -66,23 +66,24 @@ class StoryController extends Controller
         if ($request->image) {
             if($story->image)
             {
-            if(File_exists(public_path('images/story'.'/'.$story->image))){
-
-                unlink(public_path('images/story'.'/'.$story->image));
-            }
-
-                $image = $request->file('image');
-                $imageName = time().'.'.$image->extension();
-                $image->move(public_path('images\story'),$imageName);
+                if(File_exists(public_path().'/storage/'.$story->image))
+                {
         
+                   unlink(public_path().'/storage/'.$story->image);
+                }
+
+            $image= $request->file('image');
+            $name = $image->getClientOriginalName();
+            $imageName = $image->storeAs('temp_uploads\story', $name, 'public');
+
                 $story->update(['image' => $imageName]);
         }else{
             
             $image= $request->file('image');
-            $imageName = time().'.'.$image->extension();
-            $image->move(public_path('images\story'),$imageName);
+            $name = $image->getClientOriginalName();
+            $imageName = $image->storeAs('temp_uploads\story', $name, 'public');
     
-            $story->update(['image' => $imageName]);
+             $story->update(['image' => $imageName]);
         }
         }
 
@@ -93,11 +94,12 @@ class StoryController extends Controller
     public function destroy($id)
     {
 
-        $story = Story::find($id); 
+        $story = Story::find($id);
 
-        if(File_exists(public_path('images/story'.'/'.$story->image))){
+        if(File_exists(public_path().'/storage/'.$story->image))
+        {
 
-            unlink(public_path('images/story').'/'.$story->image);
+           unlink(public_path().'/storage/'.$story->image);
         }
 
         $story->delete();
