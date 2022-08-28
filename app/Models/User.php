@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use TCG\Voyager\Traits\Translatable;
 
-class User  extends  \TCG\Voyager\Models\User  implements MustVerifyEmail
+class User  extends  \TCG\Voyager\Models\User implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
     
@@ -28,6 +28,10 @@ class User  extends  \TCG\Voyager\Models\User  implements MustVerifyEmail
         'status',
         'fcm_token',
         'slug',
+        'mobile_number',
+        'social_id',
+        'social_type',
+        'email_verified_at'
     ];
 
    
@@ -35,6 +39,7 @@ class User  extends  \TCG\Voyager\Models\User  implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+
 
     /**
      * The attributes that should be cast.

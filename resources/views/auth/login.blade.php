@@ -19,7 +19,7 @@
             <div>
                 <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                <x-input id="email" class="block mt-1 w-full" type="text" name="mobile_number" :value="old('mobile_number')" required autofocus />
             </div>
 
             <!-- Password -->
@@ -47,10 +47,21 @@
                     </a>
                 @endif
 
+             
+                verify code <input type="checkbox" name="verify_code" >
+
                 <x-button class="ml-3">
                     {{ __('Log in') }}
                 </x-button>
             </div>
         </form>
+      
+        <a href="{{ route('facebook.login') }}" class="btn btn-facebook btn-user btn-block">
+            <i class="fab fa-facebook-f fa-fw"></i>
+            Login with Facebook
+         </a>
+         <a href="{{ url('auth/google') }}" style="margin-top: 0px !important;background: green;color: #ffffff;padding: 5px;border-radius:7px;" class="ml-2">
+            <strong>Google Login</strong>
+          </a> 
     </x-auth-card>
 </x-guest-layout>
